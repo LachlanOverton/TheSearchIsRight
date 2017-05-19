@@ -1,111 +1,284 @@
 package app.thesearchisright;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import org.jsoup.*;
+import android.widget.TextView;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by Lachlan on 18/05/2017.
  */
+
+
+
 public class GameActivity  extends AppCompatActivity {
 
+    public static String result;
+    String res, data;
+    Ret ret = new Ret();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         Button btn1 = (Button) findViewById(R.id.btn1);
         Button btn2 = (Button) findViewById(R.id.btn2);
         Button btn3 = (Button) findViewById(R.id.btn3);
         Button btn4 = (Button) findViewById(R.id.btn4);
+        TextView textView1 = (TextView) findViewById(R.id.txtQuestion);
 
-        String data = getIntent().getExtras().getString("Q");
-        resultGet(data);
+        Random r = new Random();
+        Integer x, rnum=0, tnum, numl;
+        String resnum, f1="", f2="", f3="";
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
-//        btn1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-    }
-
-    String resultGet(String q)
-    {
-
-//        String path = getFilesDir().getAbsolutePath();
-//        File input = new File(getFilesDir() + "/tmp.html");
-//
-//        if (!input.exists()) {
-//            try {
-//                input.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        Intent intent = getIntent();
+        data = intent.getExtras().getString("Q");
         try {
-//            Document doc = Jsoup.parse(input, "UTF-8", "http://google.com/search?q=" + q);
-//            Element content = doc.getElementById("resultStats");
-//            q = content.text();
-            Retrive r = new Retrive();
-            r.getRes(q);
-            return q;
-        }catch (IOException i){
-            Toast t = Toast.makeText(this, R.string.IOErrorToast, Toast.LENGTH_SHORT);
-            t.show();
-        }
-//http://jsoup.org/cookbook/input/load-document-from-url
-//Document doc = Jsoup.connect("http://example.com/").get();
+            result = ret.execute(data).get();
+            textView1.setText(textView1.getText() + data);
+            res = result.replace("t", "");
 
+            resnum = res.replace(",", "");
+            resnum = resnum.replace(" ","");
+            rnum = Integer.parseInt(resnum);
 
-        return q;
+            numl = resnum.length();
+            switch (numl){
+                case 2:
+                    break;
+                case 3:
+                    numl = 10;
+                    break;
+                case 4:
+                    numl = 10;
+                    break;
+                case 5:
+                    numl = 100;
+                    break;
+                case 6:
+                    numl = 1000;
+                    break;
+                case 7:
+                    numl = 10000;
+                    break;
+                case 8:
+                    numl = 100000;
+                    break;
+                case 9:
+                    numl = 1000000;
+                    break;
+                case 10:
+                    numl = 10000000;
+                    break;
+                case 11:
+                    numl = 10000000;
+                    break;
+            }
+
+            tnum = r.nextInt(rnum);
+            tnum = ((tnum+5)/numl)*numl;
+            f1 = numberFormat.format(tnum);
+            tnum = r.nextInt(rnum / 2 + (numl));
+            tnum = ((tnum+5)/numl)*numl;
+            f2 = numberFormat.format(tnum);
+            tnum = r.nextInt(rnum * 2);
+            tnum = ((tnum+5)/numl)*numl;
+            f3 = numberFormat.format(tnum);
+    }catch (Exception e){
+        e.printStackTrace();
     }
-}
+        x = r.nextInt(3);
+        Log.e("BlankityBlank", res);
+        Log.e("BlankityBlank", x.toString());
+        switch (x) {
 
-// class Retrieve extends AsyncTask<String, Void, org.w3c.dom.Document> {
-//
-//    private Exception exception;
-//
-//    protected org.w3c.dom.Document doInBackground(String... urls) {
-//        try {
-//            URL url = new URL(urls[0]);
-//            SAXParserFactory factory = SAXParserFactory.newInstance();
-//            SAXParser parser = factory.newSAXParser();
-//            XMLReader xmlreader = parser.getXMLReader();
-//            RssHandler theRSSHandler = new RssHandler();
-//            xmlreader.setContentHandler(theRSSHandler);
-//            InputSource is = new InputSource(url.openStream());
-//            xmlreader.parse(is);
-//
-//            return theRSSHandler.getFeed();
-//        } catch (Exception e) {
-//            this.exception = e;
-//
-//            return null;
-//        }
-//    }
-//
-//    protected void onPostExecute(RSSFeed feed) {
-//        // TODO: check this.exception
-//        // TODO: do something with the feed
-//    }
-//}
+            case 0:
+                btn1.setText(btn1.getText() + res);
+                btn2.setText(btn2.getText() + f1);
+                btn3.setText(btn3.getText() + f2);
+                btn4.setText(btn4.getText() + f3);
+                btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Correct();
+                    }
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                break;
+            case 1:
+                btn1.setText(btn1.getText() + f2);
+                btn2.setText(btn2.getText() + res);
+                btn3.setText(btn3.getText() + f3);
+                btn4.setText(btn4.getText() + f1);
+
+                btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Correct();
+                    }
+                });
+                btn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                break;
+            case 2:
+                btn1.setText(btn1.getText() + f1);
+                btn2.setText(btn2.getText() + f2);
+                btn3.setText(btn3.getText() + res);
+                btn4.setText(btn4.getText() + f3);
+
+                btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Correct();
+                    }
+                });
+                btn4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                break;
+            case 3:
+                btn1.setText(btn1.getText() + f3);
+                btn2.setText(btn2.getText() + f2);
+                btn3.setText(btn3.getText() + f1);
+                btn4.setText(btn4.getText() + res);
+
+                btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Incorrect();
+                    }
+                });
+                btn4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Correct();
+                    }
+                });
+                break;
+        }
+    }
+
+    Context context() {
+        return this;
+    }
+
+    void Correct() {
+        Intent intent = new Intent(context(), EndActivity.class);
+        intent.putExtra("Q", data);
+        intent.putExtra("R", "1");
+        startActivity(intent);
+    }
+
+    void Incorrect() {
+        Intent intent = new Intent(context(), EndActivity.class);
+        intent.putExtra("Q", data);
+        intent.putExtra("R", "0");
+        startActivity(intent);
+    }
+
+    private class Ret extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute()
+        {
+            result = "x";
+
+            result.replace("x","y");
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                String r = "a";
+                Document doc = Jsoup.connect("https://www.google.com/search?q=" + params[0].toString()).get();
+                r = doc.getElementsByAttributeValue("id", "resultStats").text();
+                r = r.substring(r.indexOf("t"), r.indexOf("r"));
+
+                return r;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+
+        @Override
+        protected void onPostExecute(String r) {
+
+        }
+    }
+
+}

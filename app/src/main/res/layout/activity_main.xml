@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="24dp"
-        android:text="The Search Is Right"
+        android:text="Please pick a category"
         android:id="@+id/textView" />
 
     <Button
@@ -28,7 +28,6 @@
         android:textSize="24dp"
         style="@style/AppTheme.Button"
         android:textColor="@color/colorBlue"/>
-
 
 
     <Button
@@ -66,16 +65,16 @@
         android:layout_below="@+id/btnCountries"
         android:layout_centerHorizontal="true" />
 
-   <!-- <Button
-        style="@style/AppTheme.Button"
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="People"
-        android:id="@+id/btnPeople"
-        android:layout_marginTop="24dp"
-        android:textSize="24dp"
-        android:textColor="@color/colorBlue"
-        android:layout_below="@+id/btnCompanies"
-        android:layout_centerHorizontal="true" />
-!-->
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-4932297938957654/4354412526">
+
+    </com.google.android.gms.ads.AdView>
+
 </RelativeLayout>

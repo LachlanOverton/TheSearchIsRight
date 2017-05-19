@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -33,13 +35,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 List<String> Animals = Arrays.asList(getResources().getStringArray(R.array.Animals));
-                Random r = new Random();
-                int a = r.nextInt(Animals.size());
-                String[] an = (String[]) Animals.toArray();
-                String result = an[a];
-                Intent intent = new Intent(context(), GameActivity.class);
-                intent.putExtra("Q",result);
-                startActivity(intent);
+                pass(Animals);
+
             }
         });
 
@@ -48,13 +45,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 List<String> Research = Arrays.asList(getResources().getStringArray(R.array.Research));
-                Random r = new Random();
-                int a = r.nextInt(Research.size());
-                String[] an = (String[]) Research.toArray();
-                String result = an[a];
-                Intent intent = new Intent(context(), GameActivity.class);
-                intent.putExtra("Q",result);
-                startActivity(intent);
+                pass(Research);
             }
         });
 
@@ -63,13 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 List<String> Companies = Arrays.asList(getResources().getStringArray(R.array.Companies));
-                Random r = new Random();
-                int a = r.nextInt(Companies.size());
-                String[] an = (String[]) Companies.toArray();
-                String result = an[a];
-                Intent intent = new Intent(context(), GameActivity.class);
-                intent.putExtra("Q",result);
-                startActivity(intent);
+                pass(Companies);
             }
 
         });
@@ -93,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         String result = an[a];
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("Q",result);
-        startActivity(intent);
+        try{
+        startActivity(intent);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
 }
